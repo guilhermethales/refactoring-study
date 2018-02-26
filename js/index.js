@@ -8,26 +8,41 @@ const $website = $('#website');
 const $message = $('#message');
 const $submit = $('#submit');
 
+const elementsIds = ['contact', 'name', 'email', 'phone', 'website', 'message', 'submit'];
+
+const getObjectWithElements = (elementsIds) => {
+    return elementsIds.reduce((item, id) => {
+        item[id] = $(`#${id}`);
+
+        return item;
+    }, {});
+}
+
+let elements = getObjectWithElements(elementsIds);
+
+const getPayload = () => {
+    let obj = {};
+    Object.keys(elements).map(item => {
+        obj[item] = elements[item].val();
+    })
+
+    return obj;
+}
+
 function fill() {
     $name.val('Guilherme');
     $email.val('guilhermevtog@hotmail.com');
     $phone.val('31994258494');
-    $website.val('www.guilherme.com.br');
+    $website.val('http://www.guilherme.com.br');
     $message.val('messagem teste');
 }
 
 fill();
 
-$contact.on('submit', function(event) {
+elements.contact.on('submit', (event) => {
     event.preventDefault();
 
-    let payload = {
-        name: $name,
-        email: $email,
-        phone: $phone,
-        website: $website,
-        message: $message,
-    };
+    let payload = getPayload();
 
     $name.attr('disabled', true);
     $email.attr('disabled', true);
